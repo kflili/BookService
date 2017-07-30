@@ -55,8 +55,8 @@ namespace BookService.Controllers
         }
 
         // PUT: api/Books/5
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutBook(int id, Book book)
+        [ResponseType(typeof(BookDetailDTO))]
+        public async Task<IHttpActionResult> PutBook([FromUri] int id, [FromBody] Book book)
         {
             if (!ModelState.IsValid)
             {
@@ -86,7 +86,21 @@ namespace BookService.Controllers
                 }
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            db.Entry(book).Reference(x => x.Author).Load();
+            var dto = new BookDetailDTO
+            {
+                Id = book.Id,
+                Title = book.Title,
+                Year = book.Year,
+                Price = book.Price,
+                Genre = book.Genre,
+                AuthorName = book.Author.Name
+            };
+
+            return CreatedAtRoute("DefaultApi", new { id = book.Id }, dto);
+
+            //return StatusCode(HttpStatusCode.NoContent);
+
         }
 
         // POST: api/Books
