@@ -27,7 +27,7 @@
     // Fetch the initial data.
     getAllBooks();
 
-    // set detail binding
+    // set detail binding for getBook
     self.detail = ko.observable();
 
     self.getBookDetail = function (item) {
@@ -36,6 +36,29 @@
         });
     }
 
+    // close detail window
+    self.closeDetail = function (item) {
+        self.detail('');
+    }
+
+    // set edit binding
+    self.editBook = function (item) {
+        self.detail('');
+
+    }
+
+    // deleteBook
+    self.deleteBook = function (item) {
+
+        ajaxHelper(booksUri + item.Id, 'DELETE').done(function (data) {
+            
+            if (self.detail().Id == item.Id) {
+                self.detail('');
+            }
+
+            getAllBooks();
+        });
+    }
 
     // binding for add new book
     self.authors = ko.observableArray();
@@ -68,6 +91,8 @@
             self.books.push(item);
         });
     }
+
+    
 
     getAuthors();
 };
