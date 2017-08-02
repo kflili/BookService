@@ -16,14 +16,16 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Book Service", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Authors(MVC)", "Index", "Authors1")</li>
                     <li>
-                        <button href="//github.com/kflili/LabCalendar" type="button" class="btn btn-primary navbar-btn">
+                        <a href="https://github.com/kflili/BookService">
                             <i class="fa fa-github fa-lg" aria-hidden="true"></i> Source code on GitHub
-                        </button>
+                        </a>
                     </li>
                 </ul>
             </div>
