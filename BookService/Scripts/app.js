@@ -2,7 +2,6 @@
     var self = this;
     self.books = ko.observableArray();
     self.error = ko.observable();
-
     var booksUri = '/api/books/';
 
     function ajaxHelper(uri, method, data) {
@@ -79,31 +78,30 @@
             Title: self.editableBook.Title(),
             Year: self.editableBook.Year()
         };
-        
-        console.log(bookToSave);
 
-        $.ajax({
-            url: booksUri + bookId,
-            type: 'PUT',
-            dataType: 'json',
-            data: bookToSave,
-            success: function (data, textStatus, xhr) {
-                console.log(data);
-                self.closeEditWindow();
-                self.detail(data);
-                getAllBooks();
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                console.log('Error in Operation');
-            }
-        });
-
-        //ajaxHelper(booksUri + bookId, 'PUT', bookToSave).done(function (data) {
-        //    self.closeEditWindow();
-        //    self.detail(data);
-        //    self.getAllBooks();
+        //$.ajax({
+        //    url: booksUri + bookId,
+        //    type: 'PUT',
+        //    dataType: 'json',
+        //    data: bookToSave,
+        //    success: function (data, textStatus, xhr) {
+        //        self.closeEditWindow();
+        //        self.detail(data);
+        //        getAllBooks();
+        //    },
+        //    error: function (xhr, textStatus, errorThrown) {
+        //        console.log('Error in Operation');
+        //    }
         //});
+
+        ajaxHelper(booksUri + bookId, 'PUT', bookToSave).done(function (data) {
+            self.closeEditWindow();
+            self.detail(data);
+            self.books('');
+            getAllBooks();
+        });
     }
+
 
     function findAuthorId(authorName) {
         var i;
@@ -113,6 +111,8 @@
             }
         }
     }
+
+
 
     self.editWindow = ko.observable(false);
     // close edit window
@@ -131,6 +131,7 @@
                 self.closeEditWindow();
             }
             // refresh book list
+            self.books('');
             getAllBooks();
         });
     }
@@ -161,12 +162,33 @@
             Title: self.newBook.Title(),
             Year: self.newBook.Year()
         };
-        console.log(book);
-        //ajaxHelper(booksUri, 'POST', book).done(function (item) {
-        //    self.books.push(item);
-        //});
+        
+        ajaxHelper(booksUri, 'POST', book).done(function (item) {
+            self.books.push(item);
+        });
     }
     getAuthors();
+
+    self.newAuthor = {
+        Name: ko.observable()
+    }
+
+    self.addAuthor = function (itme) {
+        // open author form
+        $('#authorModal').modal();
+    }
+
+    self.saveAuthor = function (formElement) {
+        var author = {
+            Name : self.newAuthor.Name()
+        };
+        ajaxHelper(authorsUri, 'POST', author).done(function (item) {
+            self.authors('');
+            getAuthors();
+            $('#authorModal').modal('hide');
+            $('#alertModal').modal();
+        });
+    }
 };
 
 ko.applyBindings(new ViewModel());
