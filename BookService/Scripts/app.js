@@ -161,6 +161,7 @@
             getAuthors();
             $('#authorAddingModal').modal('hide');
             $('#alertModal').modal();
+            self.newAuthor('');
         });
     }
 
