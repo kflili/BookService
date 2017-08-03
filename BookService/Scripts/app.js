@@ -37,7 +37,7 @@
         });
     }
 
-    // close detail window when click close button or open edit window
+    // close detail window
     self.closeDetailWindow = function (item) {
         self.detail('');
     }
@@ -51,11 +51,10 @@
         Title: ko.observable(),
         Year: ko.observable()
     }
-    // poll the data for showing in edit window
+
+    // poll the data for showing in editbook window
     self.editBook = function (item) {
-        // close any detail window when show edit window
-        self.closeDetailWindow();
-        self.editWindow(true);
+        $('#bookEditModal').modal();
         ajaxHelper(booksUri + item.Id, 'GET').done(function (data) {
             self.editableBook.Id(data.Id);
             self.editableBook.Genre(data.Genre);
@@ -65,44 +64,6 @@
             self.editableBook.Author(findAuthorId(data.AuthorName));
         });
     }
-
-    // save in database, close edit window and open detail window
-    self.saveUpdate = function (item) {
-        var bookId = self.editableBook.Id();
-        
-        var bookToSave = {
-            Id: self.editableBook.Id(),
-            AuthorId: self.editableBook.Author().Id,
-            Genre: self.editableBook.Genre(),
-            Price: self.editableBook.Price(),
-            Title: self.editableBook.Title(),
-            Year: self.editableBook.Year()
-        };
-
-        //$.ajax({
-        //    url: booksUri + bookId,
-        //    type: 'PUT',
-        //    dataType: 'json',
-        //    data: bookToSave,
-        //    success: function (data, textStatus, xhr) {
-        //        self.closeEditWindow();
-        //        self.detail(data);
-        //        getAllBooks();
-        //    },
-        //    error: function (xhr, textStatus, errorThrown) {
-        //        console.log('Error in Operation');
-        //    }
-        //});
-
-        ajaxHelper(booksUri + bookId, 'PUT', bookToSave).done(function (data) {
-            self.closeEditWindow();
-            self.detail(data);
-            self.books('');
-            getAllBooks();
-        });
-    }
-
-
     function findAuthorId(authorName) {
         var i;
         for (i = 0; i < self.authors().length; i++) {
@@ -111,10 +72,31 @@
             }
         }
     }
-
-
+    // save book in database, close editbook window and open bookdetail window
+    self.saveUpdate = function (item) {
+        var bookId = self.editableBook.Id();
+        var bookToSave = {
+            Id: self.editableBook.Id(),
+            AuthorId: self.editableBook.Author().Id,
+            Genre: self.editableBook.Genre(),
+            Price: self.editableBook.Price(),
+            Title: self.editableBook.Title(),
+            Year: self.editableBook.Year()
+        };
+        ajaxHelper(booksUri + bookId, 'PUT', bookToSave).done(function (data) {
+            $('#bookEditModal').modal('hide');
+            self.detail(data);
+            self.books('');
+            getAllBooks();
+            $('#alertModal').modal();
+        });
+    }
 
     self.editWindow = ko.observable(false);
+    // open editbook window
+    self.openEditWindow = function (item) {
+        self.editWindow(true);
+    }
     // close edit window
     self.closeEditWindow = function (item) {
         self.editWindow(false);
@@ -122,10 +104,7 @@
 
     // deleteBook
     self.deleteBook = function (item) {
-        
-
         ajaxHelper(booksUri + item.Id, 'DELETE').done(function (data) {
-
             if ((self.detail() != null) && self.detail().Id == item.Id) {
                 self.detail('');
                 self.closeEditWindow();
@@ -145,15 +124,12 @@
         Title: ko.observable(),
         Year: ko.observable()
     }
-
     var authorsUri = '/api/authors/';
-
     function getAuthors() {
         ajaxHelper(authorsUri, 'GET').done(function (data) {
             self.authors(data);
         });
     }
-
     self.addBook = function (formElement) {
         var book = {
             AuthorId: self.newBook.Author().Id,
@@ -162,22 +138,20 @@
             Title: self.newBook.Title(),
             Year: self.newBook.Year()
         };
-        
         ajaxHelper(booksUri, 'POST', book).done(function (item) {
             self.books.push(item);
         });
     }
     getAuthors();
 
+    // add author
     self.newAuthor = {
         Name: ko.observable()
     }
-
     self.addAuthor = function (itme) {
         // open author form
-        $('#authorModal').modal();
+        $('#authorAddingModal').modal();
     }
-
     self.saveAuthor = function (formElement) {
         var author = {
             Name : self.newAuthor.Name()
@@ -185,9 +159,22 @@
         ajaxHelper(authorsUri, 'POST', author).done(function (item) {
             self.authors('');
             getAuthors();
-            $('#authorModal').modal('hide');
+            $('#authorAddingModal').modal('hide');
             $('#alertModal').modal();
         });
+    }
+
+    // delete author
+    self.deleteAuthor = function (item) {
+        ajaxHelper(authorsUri + item.Id, 'DELETE').done(function (data) {
+            self.authors('');
+            getAuthors();
+        });
+    }
+
+    self.listAuthor = function (itme) {
+        // open author form
+        $('#authordeletingModal').modal();
     }
 };
 
