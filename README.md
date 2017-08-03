@@ -34,3 +34,21 @@ through AJAX and update the UI with the returned JSON data.
 - Windows Azure platform
 
 
+### Installation instructions
+
+Requirements:
+
+- Visual Studio 2015 - 2017
+- SQL Server Express LocalDB (to run locally)
+
+To run the sample locally from Visual Studio:
+- Download the source code and open the solution file in Visual 
+Studio
+- Build the solution.
+- Open the Package Manager Console (Tools > NuGet Package 
+Manager > Package Manager Console)
+- In the Package Manager Console window, enter the following 
+command: Update-Database
+- Press F5 to debug
+
+Part of this project was developed by following the [Using Web API 2 with Entity Framework 6](https://docs.microsoft.com/en-us/aspnet/web-api/overview/data/using-web-api-with-entity-framework/) tutorial. The operation for editting/deleting book, and adding/listing/deleting authors are implemented by myself. The tutorial only has instructions for showing book and adding book functions. 
