@@ -38,7 +38,7 @@ through AJAX and update the UI with the returned JSON data.
 
 Requirements:
 
-- Visual Studio 2015 - 2017
+- Visual Studio 2017
 - SQL Server Express LocalDB (to run locally)
 
 To run the sample locally from Visual Studio:
