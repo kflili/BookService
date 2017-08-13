@@ -1,7 +1,6 @@
-﻿# Tiny Bookshelf
+﻿# BookService
 
-This demo project "Tiny Bookshelf" is a single-page application 
-(SPA) created with ASP.NET Web API 2 and Entity Framework 6. 
+This project created a single-page application (SPA) named "Tiny Bookshelf" by using ASP.NET Web API 2 and Entity Framework 6. 
 One can browse the lists of books and authors, check the book 
 details, and perform CRUD operation on the books and authors. 
 All the operations can be done in a single HTML page and then 
@@ -9,6 +8,7 @@ updates the page dynamically, instead of loading new pages.
 After the initial page load, the app talks with the server 
 through AJAX and update the UI with the returned JSON data.
 
+Demo site on Azure: http://bookservicedemo.azurewebsites.net/
 ### Achievement
 
 - Created the HTML page by using ASP.NET MV
