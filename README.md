@@ -9,6 +9,9 @@ After the initial page load, the app talks with the server
 through AJAX and update the UI with the returned JSON data.
 
 Demo site on Azure: http://bookservicedemo.azurewebsites.net/
+
+![Demo site Capture](Bookshelf.png)
+
 ### Achievement
 
 - Created the HTML page by using ASP.NET MV
